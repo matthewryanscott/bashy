@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Colors
+
+COLOR=no
+
+if [ $COLOR == yes ]; then
+    ANSI_RED="\[\033[0;31m\]"
+    ANSI_YELLOW="\[\033[1;33m\]"
+    ANSI_WHITE="\[\033[1;37m\]"
+    ANSI_GRAY="\[\033[1;30m\]"
+    ANSI_LIGHT_RED="\[\033[1;31m\]"
+    ANSI_LIGHT_BLUE="\[\033[1;34m\]"
+    ANSI_LIGHT_GRAY="\[\033[0;37m\]"
+else
+    ANSI_RED=""
+    ANSI_YELLOW=""
+    ANSI_WHITE=""
+    ANSI_GRAY=""
+    ANSI_LIGHT_RED=""
+    ANSI_LIGHT_BLUE=""
+    ANSI_LIGHT_GRAY=""
+fi
+
+
+function parse_git_dirty {
+    # Show a * if the current git branch is dirty.
+    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+
+function parse_git_branch {
+    # Show the currently checked out branch.
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+}
+
+function virtualenv_cwd {
+    # Show the current working directory, and when in a virtualenv,
+    # replace the virtualenv's path with ellipsis.
+    if [ "${VIRTUAL_ENV}" == "" ]; then
+        if [ "${HOME}" == "${PWD::${#HOME}}" ]; then
+            echo "~${PWD:${#HOME}}"
+        else
+            echo "${PWD}"
+        fi
+    else
+        if [ "${VIRTUAL_ENV}" == "${PWD::${#VIRTUAL_ENV}}" ]; then
+            echo "...${PWD:${#VIRTUAL_ENV}}"
+        else
+            if [ "${HOME}" == "${PWD::${#HOME}}" ]; then
+                echo "~${PWD:${#HOME}}"
+            else
+                echo "${PWD}"
+            fi
+        fi
+    fi
+}
+
+function virtualenv {
+    # Show the name of the current virtualenv, if we are in one.
+    if [ "$VIRTUAL_ENV" != "" ]; then
+        VIRTUAL_ENV_BASE=`basename "${VIRTUAL_ENV}"`
+        echo "(${VIRTUAL_ENV_BASE})"
+    fi
+}
+
+function setup_prompt {
+    # Set up the prompt.
+    
+    # Update titlebar if in a terminal window.
+    case $TERM in
+	xterm*)
+            TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+            ;;
+	*)
+            TITLEBAR=""
+            ;;
+    esac
+
+    PS1="\
+${TITLEBAR}\
+${ANSI_LIGHT_RED}\$(virtualenv)\
+${ANSI_LIGHT_BLUE}(\
+${ANSI_YELLOW}\u${ANSI_LIGHT_BLUE}@${ANSI_YELLOW}\h\
+${ANSI_LIGHT_BLUE})-(\
+${ANSI_YELLOW}\$(virtualenv_cwd)\
+${ANSI_LIGHT_BLUE})\
+${ANSI_LIGHT_GRAY}\
+${ANSI_RED}\$(parse_git_branch)\
+ $ANSI_WHITE\$ "
+}
