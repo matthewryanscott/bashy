@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Clean backup files and Python bytecode files from specified
+# directories or current directory.
+
+DIRS="$@"
+if [ "$DIRS" == "" ]; then
+  DIRS=.
+fi
+
+for dir in $DIRS; do
+  pushd $dir
+  (
+    find . -name '*~'
+    find . -name '*.pyc'
+    find . -name '*.pyo'
+    find . -name '*.bak'
+    find . -name '*.swp'
+  ) | xargs rm -f >/dev/null 2>&1
+  popd
+done
