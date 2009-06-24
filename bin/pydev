@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Shortcut for "python setup.py develop"
+
+if [ "$PYTHONENV" != "" ]; then
+  EXTRA=--prefix=$PYTHONENV
+else
+  EXTRA=""
+fi
+
+py setup.py develop $@ $EXTRA
+

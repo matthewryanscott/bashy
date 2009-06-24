@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Shortcut for the currently-active Python interpreter.
+
+python "$@"
