@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Include local paths.
+if [ -f "$BASHY/local/paths" ]; then
+    . $BASHY/local/paths
+fi
+
+# Path prefixes.
+PATH=$BASHY/bin:$BASHY/local/bin:$PATH
+
+export PATH
