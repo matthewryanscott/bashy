@@ -23,17 +23,17 @@ else
 fi
 
 
-function parse_git_dirty {
+function bashy_parse_git_dirty {
     # Show a * if the current git branch is dirty.
     [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
 }
 
-function parse_git_branch {
+function bashy_parse_git_branch {
     # Show the currently checked out branch.
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(bashy_parse_git_dirty)]/"
 }
 
-function virtualenv_cwd {
+function bashy_virtualenv_cwd {
     # Show the current working directory, and when in a virtualenv,
     # replace the virtualenv's path with ellipsis.
     if [ "${VIRTUAL_ENV}" == "" ]; then
@@ -55,7 +55,7 @@ function virtualenv_cwd {
     fi
 }
 
-function virtualenv {
+function bashy_virtualenv {
     # Show the name of the current virtualenv, if we are in one.
     if [ "$VIRTUAL_ENV" != "" ]; then
         VIRTUAL_ENV_BASE=`basename "${VIRTUAL_ENV}"`
@@ -78,13 +78,13 @@ function setup_prompt {
 
     PS1="\
 ${TITLEBAR}\
-${ANSI_LIGHT_RED}\$(virtualenv)\
+${ANSI_LIGHT_RED}\$(bashy_virtualenv)\
 ${ANSI_LIGHT_BLUE}(\
 ${ANSI_YELLOW}\u${ANSI_LIGHT_BLUE}@${ANSI_YELLOW}\h\
 ${ANSI_LIGHT_BLUE})-(\
-${ANSI_YELLOW}\$(virtualenv_cwd)\
+${ANSI_YELLOW}\$(bashy_virtualenv_cwd)\
 ${ANSI_LIGHT_BLUE})\
 ${ANSI_LIGHT_GRAY}\
-${ANSI_RED}\$(parse_git_branch)\
+${ANSI_RED}\$(bashy_parse_git_branch)\
  $ANSI_WHITE\$ "
 }
