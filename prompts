@@ -25,12 +25,16 @@ fi
 
 function bashy_parse_git_dirty {
     # Show a * if the current git branch is dirty.
-    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+    if [ "$NOGIT" != "1" ]; then
+	[[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+    fi
 }
 
 function bashy_parse_git_branch {
     # Show the currently checked out branch.
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(bashy_parse_git_dirty)]/"
+    if [ "$NOGIT" != "1" ]; then
+	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(bashy_parse_git_dirty)]/"
+    fi
 }
 
 function bashy_virtualenv_cwd {
