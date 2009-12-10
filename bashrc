@@ -7,3 +7,9 @@
 setup_prompt
 
 . $BASHY/paths
+
+function cleanvirtualenv {
+    deactivate
+    rmvirtualenv clean
+    BARE=1 mkvirtualenv clean
+}
