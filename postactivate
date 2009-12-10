@@ -1,5 +1,21 @@
 #!/bin/bash
 
+if [ ${TERM} == 'screen' ]; then
+    inscreen=1
+elif [ ${TERM} == 'screen-bce' ]; then
+    inscreen=1
+else
+    inscreen=0
+fi
+
+# If we're connected to a screen, allow this to be used as a bashrc
+# file.
+if [ ${inscreen} == "1" ]; then
+    . ${HOME}/.bashrc
+    . ${VIRTUAL_ENV}/bin/activate
+fi
+
+
 # Immediately change to src directory.
 cdsrc() {
     SRCDIR=${VIRTUAL_ENV}/src
@@ -11,8 +27,10 @@ cdsrc
 . $HOME/bashy/prompts
 setup_prompt
 
-# Start screen if it's available.
-SCREENRC=${VIRTUAL_ENV}/screenrc
-if [ -f ${SCREENRC} ]; then
-    screen -S `basename ${VIRTUAL_ENV}` -c ${SCREENRC} -d -R
+# Start screen if it's available and we're not already screened.
+if [ ${inscreen} == "0" ]; then
+    SCREENRC=${VIRTUAL_ENV}/screenrc
+    if [ -f ${SCREENRC} ]; then
+	screen -S `basename ${VIRTUAL_ENV}` -c ${SCREENRC} -d -R
+    fi
 fi
