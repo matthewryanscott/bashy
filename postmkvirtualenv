@@ -49,7 +49,7 @@ termcapinfo mlterm 'Co#256:AB=E[48;5;%dm:AF=E[38;5;%dm'
 defbce "on"
 
 # Automatically start up a bunch of windows.
-screen -t "shell" 0
+screen -t "shell" 0 bash --rcfile ${WORKON_HOME}/postactivate
 
 # Further examples
 #screen -t "code" 1 
