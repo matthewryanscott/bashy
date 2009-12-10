@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-echo "Installing pythonw executable"
-
 if [ -f $VIRTUAL_ENV/bin/activate ]; then
 
     echo "Creating .../src"
