@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Immediately change to src directory.
+cdsrc() {
+    SRCDIR=${VIRTUAL_ENV}/src
+    mkdir -p ${SRCDIR} && cd ${SRCDIR}
+}
+cdsrc
+
+# Use default prompt since it's smart about virtualenv.
+. $HOME/bashy/prompts
+setup_prompt
+
+# Start screen if it's available.
+SCREENRC=${VIRTUAL_ENV/screenrc}
+if [ -f ${SCREENRC} ]; then
+    screen -S `basename ${VIRTUAL_ENV}` -c ${SCREENRC} -d -R
+fi
