@@ -32,5 +32,6 @@ if [ ${inscreen} == "0" ]; then
     SCREENRC=${VIRTUAL_ENV}/screenrc
     if [ -f ${SCREENRC} ]; then
 	screen -S `basename ${VIRTUAL_ENV}` -c ${SCREENRC} -d -R
+	deactivate
     fi
 fi
