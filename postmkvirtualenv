@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-echo "Installing pythonw executable"
-
 if [ -f $VIRTUAL_ENV/bin/activate ]; then
 
     echo "Creating .../src"
@@ -27,7 +25,7 @@ if [ -f $VIRTUAL_ENV/bin/activate ]; then
     done
     
     echo ""
-    echo -n "Installing screenrc."
+    echo "Installing screenrc."
 
     cat > ${VIRTUAL_ENV}/screenrc <<EOF
 # Draw bar across bottom with window names and system CPU load
